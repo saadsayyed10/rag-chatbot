@@ -9,4 +9,16 @@ userRouter.post("/login", controller.loginUserController);
 
 userRouter.get("/profile", protectRoute, controller.profileUserController);
 
+userRouter.put(
+  "/change-password",
+  protectRoute,
+  controller.changePasswordUserController,
+);
+
+userRouter.delete(
+  "/delete-account",
+  protectRoute,
+  controller.deleteUserController,
+);
+
 export default userRouter;

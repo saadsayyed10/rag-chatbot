@@ -5,7 +5,7 @@ export const registerUserController = async (req, res) => {
   const data = { firstName, lastName, email, password };
 
   if (!data) {
-    return res.status(500).json({ error: "All fields are required" });
+    return res.status(404).json({ error: "All fields are required" });
   }
 
   try {
@@ -28,7 +28,7 @@ export const loginUserController = async (req, res) => {
   const data = { email, password };
 
   if (!data) {
-    return res.status(500).json({ error: "All fields are required" });
+    return res.status(404).json({ error: "All fields are required" });
   }
 
   try {
@@ -52,6 +52,47 @@ export const profileUserController = async (req, res) => {
 
     const user = await usersService.profileUserService(req.user.id.toString());
     res.status(200).json({ data: user });
+  } catch (error) {
+    return res.status(400).json({ error: error.message });
+  }
+};
+
+export const deleteUserController = async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ error: "Unauthorized: No token found" });
+    }
+
+    const user = await usersService.deleteUserService(req.user.id.toString());
+    res.status(200).json({ data: `Deleted account: ${user.email}` });
+  } catch (error) {
+    return res.status(400).json({ error: error.message });
+  }
+};
+
+export const changePasswordUserController = async (req, res) => {
+  const { oldPassword, newPassword } = req.body;
+  const data = { oldPassword, newPassword };
+
+  if (!data) {
+    return res
+      .status(404)
+      .json({ error: "Please enter both of the fields for password" });
+  }
+
+  try {
+    if (!req.user) {
+      return res.status(401).json({ error: "Unauthorized: No token found" });
+    }
+
+    const user = await usersService.changePasswordUserService(
+      req.user.id.toString(),
+      oldPassword,
+      newPassword,
+    );
+    res
+      .status(200)
+      .json({ data: `Password changed for account: ${user.email}` });
   } catch (error) {
     return res.status(400).json({ error: error.message });
   }

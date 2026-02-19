@@ -64,10 +64,36 @@ export const profileUserService = async (userId) => {
   });
 };
 
-export const updateUserService = async () => {};
+export const deleteUserService = async (userId) => {
+  return await prisma.users.delete({
+    where: {
+      id: userId,
+    },
+  });
+};
 
-export const deleteUserService = async () => {};
+export const changePasswordUserService = async (
+  userId,
+  oldPassword,
+  newPassword,
+) => {
+  const user = await prisma.users.findUnique({
+    where: {
+      id: userId,
+    },
+  });
 
-export const changePasswordUserService = async () => {};
+  const isValidPassword = await bcryptjs.compare(oldPassword, user.password);
+  if (!isValidPassword) throw new Error("Current password is incorrect");
 
-export const forgotPasswordUserService = async () => {};
+  const password = await bcryptjs.hash(newPassword, 10);
+
+  return await prisma.users.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      password,
+    },
+  });
+};
