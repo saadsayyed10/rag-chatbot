@@ -22,3 +22,24 @@ export const registerUserController = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
+export const loginUserController = async (req, res) => {
+  const { email, password } = req.body;
+  const data = { email, password };
+
+  if (!data) {
+    return res.status(500).json({ error: "All fields are required" });
+  }
+
+  try {
+    const { user, token } = await usersService.loginUserService(
+      email,
+      password,
+    );
+    res
+      .status(200)
+      .json({ message: "User logged in", token: token, data: user });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};

@@ -32,7 +32,22 @@ export const registerUserService = async (
   return { user, token };
 };
 
-export const loginUserService = async () => {};
+export const loginUserService = async (email, password) => {
+  const user = await prisma.users.findUnique({
+    where: {
+      email,
+    },
+  });
+
+  if (!user) throw new Error("User account does not exist");
+
+  const isValidPassword = await bcryptjs.compare(password, user.password);
+  if (!isValidPassword) throw new Error("Password is incorrect");
+
+  const token = generateToken(user.id);
+
+  return { user, token };
+};
 
 export const updateUserService = async () => {};
 
