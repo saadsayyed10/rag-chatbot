@@ -8,24 +8,39 @@ import {
 } from "react-native";
 import React from "react";
 import { Link, useRouter } from "expo-router";
+import { useSignUp } from "@/hooks/useSignUp";
 
-const SignIn = () => {
+const SignUp1 = () => {
   const router = useRouter();
+  const { firstName, setFirstName, lastName, setLastName, email, setEmail } =
+    useSignUp();
 
   return (
     <TouchableNativeFeedback onPress={Keyboard.dismiss}>
       <View className="flex-1 justify-center items-center w-full gap-y-4 p-10">
         <View className="flex justify-start items-start w-full gap-y-2">
           <Text className="text-neutral-800 font-semibold italic">Name</Text>
-          <TextInput className="h-12 p-2 w-full border border-neutral-400" />
+          <TextInput
+            value={firstName}
+            onChangeText={setFirstName}
+            className="h-12 p-2 w-full border border-neutral-400"
+          />
         </View>
         <View className="flex justify-start items-start w-full gap-y-2">
           <Text className="text-neutral-800 font-semibold italic">Surname</Text>
-          <TextInput className="h-12 p-2 w-full border border-neutral-400" />
+          <TextInput
+            value={lastName}
+            onChangeText={setLastName}
+            className="h-12 p-2 w-full border border-neutral-400"
+          />
         </View>
         <View className="flex justify-start items-start w-full gap-y-2">
           <Text className="text-neutral-800 font-semibold italic">Email</Text>
-          <TextInput className="h-12 p-2 w-full border border-neutral-400" />
+          <TextInput
+            value={email}
+            onChangeText={setEmail}
+            className="h-12 p-2 w-full border border-neutral-400"
+          />
         </View>
         <View className="flex justify-center items-center w-full absolute bottom-10 gap-y-2">
           <TouchableOpacity
@@ -45,4 +60,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default SignUp1;

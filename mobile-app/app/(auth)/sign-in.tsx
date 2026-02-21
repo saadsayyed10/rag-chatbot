@@ -15,6 +15,7 @@ import { useAuthStore } from "@/hooks/useAuth";
 const SignIn = () => {
   const router = useRouter();
   const setAuth = useAuthStore((state) => state.setAuth);
+  const hydrate = useAuthStore((state) => state.hydrate);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,7 +29,7 @@ const SignIn = () => {
       const { token, data: user } = res.data;
 
       setAuth(token, user);
-      alert("Logged In");
+      hydrate();
       router.replace("/");
     } catch (error) {
       console.log(error);
