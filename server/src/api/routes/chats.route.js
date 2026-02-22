@@ -5,5 +5,6 @@ import { protectRoute } from "../../middleware/auth.middleware.js";
 const chatRouter = Router();
 
 chatRouter.post("/ask/ai", protectRoute, controller.askChatController);
+chatRouter.get("/", protectRoute, controller.userChatsController);
 
 export default chatRouter;

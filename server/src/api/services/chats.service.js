@@ -15,5 +15,16 @@ export const userChatsService = async (userId) => {
     where: {
       users_id: userId,
     },
+    select: {
+      question: true,
+      answer: true,
+      users: {
+        select: {
+          firstname: true,
+          surname: true,
+          email: true,
+        },
+      },
+    },
   });
 };

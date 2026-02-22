@@ -16,3 +16,15 @@ export const askChatController = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
+export const userChatsController = async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+    const chats = await chatsService.userChatsService(req.user.id);
+    res.status(200).json({ data: chats });
+  } catch (error) {
+    return res.status(400).json({ error: error.message });
+  }
+};
