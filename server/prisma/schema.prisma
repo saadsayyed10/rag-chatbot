@@ -24,5 +24,5 @@ model chats {
   created_at DateTime @default(now())
 
   users_id String?
-  users    users?  @relation(fields: [users_id], references: [id])
+  users    users?  @relation(fields: [users_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
