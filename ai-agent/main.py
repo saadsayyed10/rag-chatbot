@@ -4,7 +4,15 @@ load_dotenv()
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
 
+from fastapi import FastAPI
+from pydantic import BaseModel
+
 from vector import retriever
+
+app = FastAPI()
+
+class QuestionRequest(BaseModel):
+    question: str
 
 model = ChatGoogleGenerativeAI(
     model = "gemini-2.5-flash-lite",
@@ -28,18 +36,33 @@ INSTRUCTIONS:
 prompt = ChatPromptTemplate.from_template(template)
 chain = prompt | model
 
-while True:
-    print("\n\n--------------------------------------------------")
-    question = input("Ask your question (press q to quit): ")
-    if question.lower() == "q":
-        break
-
-    reviews = retriever.invoke(question)
-
+@app.post("/ask")
+async def ask_question(data: QuestionRequest):
+    reviews = retriever.invoke(data.question)
+    
     result = chain.invoke({
         "reviews": reviews,
-        "question": question
+        "question": data.question
     })
 
-    print("\n\n")
-    print(result.content)
+    return {
+        "question": data.question,
+        "answer": result.content
+    }
+
+
+# while True:
+#     print("\n\n--------------------------------------------------")
+#     question = input("Ask your question (press q to quit): ")
+#     if question.lower() == "q":
+#         break
+
+#     reviews = retriever.invoke(question)
+
+#     result = chain.invoke({
+#         "reviews": reviews,
+#         "question": question
+#     })
+
+#     print("\n\n")
+#     print(result.content)

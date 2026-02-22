@@ -14,4 +14,15 @@ model users {
   email      String   @unique
   password   String
   created_at DateTime @default(now())
+  chats      chats[]
+}
+
+model chats {
+  id         String   @id @default(uuid())
+  question   String
+  response   String
+  created_at DateTime @default(now())
+
+  users_id String?
+  users    users?  @relation(fields: [users_id], references: [id])
 }
