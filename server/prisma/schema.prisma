@@ -20,7 +20,7 @@ model users {
 model chats {
   id         String   @id @default(uuid())
   question   String
-  response   String
+  answer     String
   created_at DateTime @default(now())
 
   users_id String?
